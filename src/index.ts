@@ -7,7 +7,7 @@ import morgan from "morgan";
 const app = express();
 const PORT = process.env.PORT || 4444;
 
-
+app.use(express.json());
 app.use(morgan("dev"));
 app.use(express.static(path.resolve(__dirname, "public")));
 app.use(router)

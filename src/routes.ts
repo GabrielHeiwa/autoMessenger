@@ -1,36 +1,29 @@
 import { Router } from "express";
-import { Client } from "whatsapp-web.js";
-import { create, toDataURL } from "qrcode";
-import { socketServer } from ".";
-
+import WebWhatsappClient from "./services"
 
 const router = Router();
 
-
 router.get("/qrcode", (request, response) => {
-    const ClientWhatsapp = new Client({
-        puppeteer: {
-            args: [
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-            ],
-        }
-    });
-    const qrcode = require("qrcode-terminal");
+    try {
+        WebWhatsappClient.qrcode()
+        return response.status(200);
+    } catch (err) {
+        return response.status(400).json({
+            msg: "Error in send QRCode from user",
+        });
+    };
+});
 
-
-    ClientWhatsapp.on("qr", async (qr) => {
-        const imgSrc = await toDataURL(qr, {})
-        socketServer.emit("qr", imgSrc);
-    });
-    
-    ClientWhatsapp.on("ready", () => {
-        console.log("Whathsapp conectado!");
-    });
-
-    ClientWhatsapp.initialize();
-
-    return response.end()
+router.post("/send", (request, response) => {
+    try {
+        console.log(request.body);
+        WebWhatsappClient.sendMessages(request.body);
+        return response.status(200);
+    } catch (err) {
+        return response.status(400).json({
+            msg: "Error in send QRCode from user",
+        });
+    };
 });
 
 export { router };
