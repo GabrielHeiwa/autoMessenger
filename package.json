@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node ./src/dist",
+    "start": "npm i && node ./src/dist",
     "dev": "tsnd --transpile-only --ignore-watch node_modules ./src/"
   },
   "dependencies": {
