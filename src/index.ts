@@ -1,13 +1,11 @@
 import express from "express";
-import { createServer } from "http";
 import path from "path";
 import { Server } from "socket.io";
 import { router } from "./routes";
 import morgan from "morgan";
 
 const app = express();
-const server = createServer(app);
-const PORT = process.env.PORT || 3333;
+const PORT = process.env.PORT || 4444;
 
 
 app.use(morgan("dev"));
@@ -20,10 +18,10 @@ const socketIOOptions = {
         origin: "*"
     }
 };
-const socketServer = new Server(server, socketIOOptions);
+const socketServer = new Server(3333, socketIOOptions);
 
 
-server.listen(PORT, () => console.log(`> Running`));
+app.listen(PORT, () => console.log(`> Running`));
 
 
 export { socketServer };
