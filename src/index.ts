@@ -7,7 +7,7 @@ import morgan from "morgan";
 
 const app = express();
 const server = createServer(app);
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3333;
 
 
 app.use(morgan("dev"));
@@ -23,7 +23,7 @@ const socketIOOptions = {
 const socketServer = new Server(server, socketIOOptions);
 
 
-server.listen(3000, () => console.log(`> Running in http://localhost:${PORT}`));
+server.listen(PORT, () => console.log(`> Running`));
 
 
 export { socketServer };
