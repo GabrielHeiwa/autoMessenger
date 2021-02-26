@@ -40,10 +40,18 @@ exports.router = void 0;
 var express_1 = require("express");
 var whatsapp_web_js_1 = require("whatsapp-web.js");
 var qrcode_1 = require("qrcode");
+var _1 = require(".");
 var router = express_1.Router();
 exports.router = router;
 router.get("/qrcode", function (request, response) {
-    var ClientWhatsapp = new whatsapp_web_js_1.Client({});
+    var ClientWhatsapp = new whatsapp_web_js_1.Client({
+        puppeteer: {
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+            ],
+        }
+    });
     var qrcode = require("qrcode-terminal");
     ClientWhatsapp.on("qr", function (qr) { return __awaiter(void 0, void 0, void 0, function () {
         var imgSrc;
@@ -52,7 +60,7 @@ router.get("/qrcode", function (request, response) {
                 case 0: return [4 /*yield*/, qrcode_1.toDataURL(qr, {})];
                 case 1:
                     imgSrc = _a.sent();
-                    response.send("<img src=\"" + imgSrc + "\"/>");
+                    _1.socketServer.emit("qr", imgSrc);
                     return [2 /*return*/];
             }
         });
@@ -61,4 +69,5 @@ router.get("/qrcode", function (request, response) {
         console.log("Whathsapp conectado!");
     });
     ClientWhatsapp.initialize();
+    return response.end();
 });
