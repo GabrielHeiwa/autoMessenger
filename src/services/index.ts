@@ -18,12 +18,15 @@ class WebWhatsappClient {
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
                 ],
-            }
+                headless: false
+            },
+            
         });
 
         this.ClientWhatsapp.on("disconnected", () => {
             console.log("Disconnected!");
-        })
+            this.ClientWhatsapp.destroy();
+        });
 
         this.ClientWhatsapp.on("ready", () => {
             console.log("Whathsapp conectado!");
@@ -32,13 +35,14 @@ class WebWhatsappClient {
         this.ClientWhatsapp.initialize();
     };
 
-    async qrcode() {
+    async qrcode(socketID: string) {
         this.ClientWhatsapp.on("qr", async (qr) => {
             const qrcode = await toDataURL(qr, {})
-            socketServer.emit("qr", qrcode);
-        });
 
-        
+            socketServer.to(socketID).emit("qr", qrcode);
+            console.log("send qr from: " + socketID );
+            
+        });
     };
 
     async sendMessages(dataMessages: DataMessages) {
@@ -47,6 +51,7 @@ class WebWhatsappClient {
             if (count === dataMessages.numbers.length) {
                 await this.ClientWhatsapp.logout();
                 clearInterval(interval);
+                return console.log("End messages");
             };
 
             await this.ClientWhatsapp.sendMessage(dataMessages.numbers[count] + "@c.us", dataMessages.message);
@@ -56,4 +61,4 @@ class WebWhatsappClient {
     };
 };
 
-export default new WebWhatsappClient();
+export default WebWhatsappClient;

@@ -1,7 +1,7 @@
 const socket = io("http://localhost:3333");
 const qrCodeImg = document.querySelector("img");
 socket.on("qr", (data) => qrCodeImg.src = data);
-const response = axios.get("http://localhost:4444/qrcode").then(response => console.log(response.data));
+const response = axios.get("/qrcode").then(response => console.log(response.data));
 
 const btnSubmit = document.querySelector("button#btnSubmit");
 const inputFileCSV = document.querySelector("input#csvFile");

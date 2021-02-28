@@ -11,6 +11,7 @@ var routes_1 = require("./routes");
 var morgan_1 = __importDefault(require("morgan"));
 var app = express_1.default();
 var PORT = process.env.PORT || 4444;
+app.use(express_1.default.json());
 app.use(morgan_1.default("dev"));
 app.use(express_1.default.static(path_1.default.resolve(__dirname, "public")));
 app.use(routes_1.router);
