@@ -41,16 +41,19 @@ var index_1 = require("../index");
 var qrcode_1 = require("qrcode");
 var WebWhatsappClient = /** @class */ (function () {
     function WebWhatsappClient() {
+        var _this = this;
         this.ClientWhatsapp = new whatsapp_web_js_1.Client({
             puppeteer: {
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
                 ],
-            }
+                headless: false
+            },
         });
         this.ClientWhatsapp.on("disconnected", function () {
             console.log("Disconnected!");
+            _this.ClientWhatsapp.destroy();
         });
         this.ClientWhatsapp.on("ready", function () {
             console.log("Whathsapp conectado!");
@@ -58,7 +61,7 @@ var WebWhatsappClient = /** @class */ (function () {
         this.ClientWhatsapp.initialize();
     }
     ;
-    WebWhatsappClient.prototype.qrcode = function () {
+    WebWhatsappClient.prototype.qrcode = function (socketID) {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
@@ -69,7 +72,8 @@ var WebWhatsappClient = /** @class */ (function () {
                             case 0: return [4 /*yield*/, qrcode_1.toDataURL(qr, {})];
                             case 1:
                                 qrcode = _a.sent();
-                                index_1.socketServer.emit("qr", qrcode);
+                                index_1.socketServer.to(socketID).emit("qr", qrcode);
+                                console.log("send qr from: " + socketID);
                                 return [2 /*return*/];
                         }
                     });
@@ -94,7 +98,7 @@ var WebWhatsappClient = /** @class */ (function () {
                             case 1:
                                 _a.sent();
                                 clearInterval(interval);
-                                _a.label = 2;
+                                return [2 /*return*/, console.log("End messages")];
                             case 2:
                                 ;
                                 return [4 /*yield*/, this.ClientWhatsapp.sendMessage(dataMessages.numbers[count] + "@c.us", dataMessages.message)];
@@ -114,4 +118,4 @@ var WebWhatsappClient = /** @class */ (function () {
     return WebWhatsappClient;
 }());
 ;
-exports.default = new WebWhatsappClient();
+exports.default = WebWhatsappClient;

@@ -16,13 +16,9 @@ app.use(router)
 const socketIOOptions = {
     cors: {
         origin: "*"
-    }
+    },
 };
 const socketServer = new Server(3333, socketIOOptions);
-
-
-
-app.listen(PORT, () => console.log(`> Running`));
-
+app.listen(PORT, () => console.log(`> Running http://loclahost:${PORT}`));
 
 export { socketServer };

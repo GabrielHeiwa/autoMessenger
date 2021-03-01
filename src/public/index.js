@@ -1,14 +1,29 @@
-const socket = io("http://localhost:3333");
+let activeButtonForSendMessages = false;
 const qrCodeImg = document.querySelector("img");
-socket.on("qr", (data) => qrCodeImg.src = data);
-const response = axios.get("/qrcode").then(response => console.log(response.data));
-
 const btnSubmit = document.querySelector("button#btnSubmit");
 const inputFileCSV = document.querySelector("input#csvFile");
 const inputMessage = document.querySelector("textarea#message");
 let validNumbers = [], invalidNumbers = [];
 
-btnSubmit?.addEventListener("click", () => {
+btnSubmit.disabled = true;
+
+const socket = io(":3333");
+socket.on("connect", async () => {
+    console.info(`socket:${socket.id} connect`);
+    await axios.get("/qrcode").then(res => console.info(res.data));
+
+    socket.on("status", status => {
+        console.info(status);
+        if (status === "Whatsapp conectado!") return btnSubmit.disabled = false;
+    });
+
+    socket.on("messages-status", messages_status => console.table(messages_status));
+
+    socket.on("qr", (data) => qrCodeImg.src = data);
+
+});
+
+btnSubmit.addEventListener("click", async () => {
     if (inputFileCSV.files.length === 0) return alert("Selecione um arquivo com os números que deseja enviar.");
     if (inputMessage.value === "") return alert("Escreva uma mensagem para os contatos");
 
@@ -17,7 +32,7 @@ btnSubmit?.addEventListener("click", () => {
         numbers: validNumbers,
         time: 5000
     };
-    axios.post("http://localhost:4444/send", variables)
+    await axios.post("http://localhost:4444/send", variables)
 });
 
 

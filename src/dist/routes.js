@@ -5,13 +5,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 var express_1 = require("express");
+var _1 = require(".");
 var services_1 = __importDefault(require("./services"));
 var router = express_1.Router();
 exports.router = router;
+var client;
 router.get("/qrcode", function (request, response) {
     try {
-        services_1.default.qrcode();
-        return response.status(200);
+        client = new services_1.default();
+        _1.socketServer.on("connection", function (socket) {
+            console.log(socket.id);
+            client.qrcode(socket.id);
+        });
+        return response.status(200).send("ok");
     }
     catch (err) {
         return response.status(400).json({
@@ -23,8 +29,8 @@ router.get("/qrcode", function (request, response) {
 router.post("/send", function (request, response) {
     try {
         console.log(request.body);
-        services_1.default.sendMessages(request.body);
-        return response.status(200);
+        client.sendMessages(request.body);
+        return response.status(200).send("ok");
     }
     catch (err) {
         return response.status(400).json({

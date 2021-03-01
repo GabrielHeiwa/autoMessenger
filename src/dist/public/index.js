@@ -1,14 +1,14 @@
 const socket = io("http://localhost:3333");
 const qrCodeImg = document.querySelector("img");
 socket.on("qr", (data) => qrCodeImg.src = data);
-const response = axios.get("http://localhost:4444/qrcode").then(response => console.log(response.data));
+const response = axios.get("/qrcode").then(response => console.log(response.data));
 
 const btnSubmit = document.querySelector("button#btnSubmit");
 const inputFileCSV = document.querySelector("input#csvFile");
 const inputMessage = document.querySelector("textarea#message");
 let validNumbers = [], invalidNumbers = [];
 
-btnSubmit?.addEventListener("click", () => {
+btnSubmit.addEventListener("click", () => {
     if (inputFileCSV.files.length === 0) return alert("Selecione um arquivo com os números que deseja enviar.");
     if (inputMessage.value === "") return alert("Escreva uma mensagem para os contatos");
 

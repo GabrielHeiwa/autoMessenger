@@ -4,13 +4,27 @@ import WebWhatsappClient from "./services"
 
 const router = Router();
 let client: WebWhatsappClient;
+
 router.get("/qrcode", (request, response) => {
+    let socketSession = 0;
     try {
-        client = new WebWhatsappClient();
         socketServer.on("connection", socket => {
-            console.log(socket.id);
-            
-            client.qrcode(socket.id);
+            socket.on("disconnect", async () => { 
+                client.destroyClient();
+                console.info(`socket:${socket.id} desconectado`);
+            });
+
+            if (socket.connected) {
+                socketSession++;
+            };
+
+            if(socketSession !== 1) return;
+
+            console.log(`socket:${socket.id} conectado.`);
+
+            client = new WebWhatsappClient(socket.id);
+            client.startClient();
+            client.qrcode();
         });
         return response.status(200).send("ok");
     } catch (err) {
