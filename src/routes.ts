@@ -7,30 +7,24 @@ let client: WebWhatsappClient;
 
 router.get("/qrcode", (request, response) => {
     let socketSession = 0;
-    try {
-        socketServer.on("connect", socket => {
-            socket.on("disconnect", async () => { 
-                client.destroyClient();
-                console.info(`socket:${socket.id} desconectado`);
-            });
-
-            if (socket.connected) {
-                socketSession++;
-            };
-
-            if(socketSession !== 1) return;
-
-            console.log(`socket:${socket.id} conectado.`);
-
-            client = new WebWhatsappClient(socket.id);
-            client.qrcode();
+    socketServer.on("connect", socket => {
+        socket.on("disconnect", async () => {
+            client.destroyClient();
+            console.info(`socket:${socket.id} desconectado`);
         });
-        return response.status(200).send("ok");
-    } catch (err) {
-        return response.status(400).json({
-            msg: "Error in send QRCode from user",
-        });
-    };
+
+        if (socket.connected) {
+            socketSession++;
+        };
+
+        if (socketSession !== 1) return;
+
+        console.log(`socket:${socket.id} conectado.`);
+
+        client = new WebWhatsappClient(socket.id);
+        client.qrcode();
+    });
+    return response.status(200).send("ok");
 });
 
 router.post("/send", (request, response) => {

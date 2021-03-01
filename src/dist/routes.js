@@ -48,33 +48,25 @@ exports.router = router;
 var client;
 router.get("/qrcode", function (request, response) {
     var socketSession = 0;
-    try {
-        _1.socketServer.on("connect", function (socket) {
-            socket.on("disconnect", function () { return __awaiter(void 0, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    client.destroyClient();
-                    console.info("socket:" + socket.id + " desconectado");
-                    return [2 /*return*/];
-                });
-            }); });
-            if (socket.connected) {
-                socketSession++;
-            }
-            ;
-            if (socketSession !== 1)
-                return;
-            console.log("socket:" + socket.id + " conectado.");
-            client = new services_1.default(socket.id);
-            client.qrcode();
-        });
-        return response.status(200).send("ok");
-    }
-    catch (err) {
-        return response.status(400).json({
-            msg: "Error in send QRCode from user",
-        });
-    }
-    ;
+    _1.socketServer.on("connect", function (socket) {
+        socket.on("disconnect", function () { return __awaiter(void 0, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                client.destroyClient();
+                console.info("socket:" + socket.id + " desconectado");
+                return [2 /*return*/];
+            });
+        }); });
+        if (socket.connected) {
+            socketSession++;
+        }
+        ;
+        if (socketSession !== 1)
+            return;
+        console.log("socket:" + socket.id + " conectado.");
+        client = new services_1.default(socket.id);
+        client.qrcode();
+    });
+    return response.status(200).send("ok");
 });
 router.post("/send", function (request, response) {
     try {
