@@ -23,7 +23,6 @@ router.get("/qrcode", (request, response) => {
             console.log(`socket:${socket.id} conectado.`);
 
             client = new WebWhatsappClient(socket.id);
-            client.startClient();
             client.qrcode();
         });
         return response.status(200).send("ok");

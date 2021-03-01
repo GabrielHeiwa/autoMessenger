@@ -18,7 +18,7 @@ class WebWhatsappClient {
             puppeteer: {
                 args: [
                     '--no-sandbox',
-                    // '--disable-setuid-sandbox',
+                    '--disable-setuid-sandbox',
                 ],
             },
         });
@@ -30,10 +30,7 @@ class WebWhatsappClient {
         this.ClientWhatsapp.on("ready", () => {
             socketServer.to(this.socketID).emit("status", "Whatsapp conectado!")
         });
-    };
 
-    async startClient() {
-        // Function for start a client.
         this.ClientWhatsapp.initialize();
     };
 

@@ -65,7 +65,6 @@ router.get("/qrcode", function (request, response) {
                 return;
             console.log("socket:" + socket.id + " conectado.");
             client = new services_1.default(socket.id);
-            client.startClient();
             client.qrcode();
         });
         return response.status(200).send("ok");

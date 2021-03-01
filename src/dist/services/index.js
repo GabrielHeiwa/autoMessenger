@@ -47,7 +47,7 @@ var WebWhatsappClient = /** @class */ (function () {
             puppeteer: {
                 args: [
                     '--no-sandbox',
-                    // '--disable-setuid-sandbox',
+                    '--disable-setuid-sandbox',
                 ],
             },
         });
@@ -57,17 +57,8 @@ var WebWhatsappClient = /** @class */ (function () {
         this.ClientWhatsapp.on("ready", function () {
             index_1.socketServer.to(_this.socketID).emit("status", "Whatsapp conectado!");
         });
+        this.ClientWhatsapp.initialize();
     }
-    ;
-    WebWhatsappClient.prototype.startClient = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                // Function for start a client.
-                this.ClientWhatsapp.initialize();
-                return [2 /*return*/];
-            });
-        });
-    };
     ;
     WebWhatsappClient.prototype.qrcode = function () {
         return __awaiter(this, void 0, void 0, function () {
