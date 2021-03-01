@@ -1,4 +1,4 @@
-import { Client, WhatsWebURL } from "whatsapp-web.js";
+import { Client } from "whatsapp-web.js";
 import { socketServer } from "../index";
 import { toDataURL } from "qrcode";
 
