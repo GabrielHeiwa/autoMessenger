@@ -1,4 +1,5 @@
 import socketIOServer from "./socket";
+import HTTPServer from "./server";
 import WebWhatsappClient from "./services";
 
 let client: WebWhatsappClient;
@@ -13,3 +14,6 @@ socketIOServer.on("connect", socket => {
     client = new WebWhatsappClient(socket.id);
     client.qrcode();
 })
+
+const PORT = process.env.PORT || 4444;
+HTTPServer.listen(PORT, () => console.info("> Running in " + PORT));
