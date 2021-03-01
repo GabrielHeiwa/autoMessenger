@@ -7,7 +7,7 @@ let validNumbers = [], invalidNumbers = [];
 
 btnSubmit.disabled = true;
 
-const socket = io(":3333");
+const socket = io();
 socket.on("connect", async () => {
     console.info(`socket:${socket.id} connect`);
     await axios.get("/qrcode").then(res => console.info(res.data));

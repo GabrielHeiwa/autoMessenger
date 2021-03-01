@@ -21,6 +21,6 @@ app.use(morgan("dev"));
 app.use(express.static(path.resolve(__dirname, "public")));
 app.use(router)
 
-server.listen(4444, () => console.log("> Running"));
+server.listen(PORT, () => console.log("> Running"));
 
 export { socketServer };

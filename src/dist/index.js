@@ -8,18 +8,20 @@ var express_1 = __importDefault(require("express"));
 var path_1 = __importDefault(require("path"));
 var socket_io_1 = require("socket.io");
 var routes_1 = require("./routes");
+var http_1 = require("http");
 var morgan_1 = __importDefault(require("morgan"));
 var app = express_1.default();
-var PORT = process.env.PORT || 4444;
-app.use(express_1.default.json());
-app.use(morgan_1.default("dev"));
-app.use(express_1.default.static(path_1.default.resolve(__dirname, "public")));
-app.use(routes_1.router);
+var server = http_1.createServer(app);
 var socketIOOptions = {
     cors: {
         origin: "*"
     },
 };
-var socketServer = new socket_io_1.Server(3333, socketIOOptions);
+var socketServer = new socket_io_1.Server(server, socketIOOptions);
 exports.socketServer = socketServer;
-app.listen(PORT, function () { return console.log("> Running http://loclahost:" + PORT); });
+var PORT = process.env.PORT || 4444;
+app.use(express_1.default.json());
+app.use(morgan_1.default("dev"));
+app.use(express_1.default.static(path_1.default.resolve(__dirname, "public")));
+app.use(routes_1.router);
+server.listen(PORT, function () { return console.log("> Running"); });
