@@ -35,10 +35,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var whatsapp_web_js_1 = require("whatsapp-web.js");
-var index_1 = require("../index");
 var qrcode_1 = require("qrcode");
+var socket_1 = __importDefault(require("../socket"));
+// WebWhatsapp Class client.
 var WebWhatsappClient = /** @class */ (function () {
     function WebWhatsappClient(socketID) {
         var _this = this;
@@ -49,13 +53,14 @@ var WebWhatsappClient = /** @class */ (function () {
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
                 ],
+                headless: false
             },
         });
         this.ClientWhatsapp.on("disconnected", function (reason) {
-            index_1.socketServer.to(_this.socketID).emit("status", "Whatsapp disconectado!");
+            socket_1.default.to(_this.socketID).emit("status", "Whatsapp disconectado!");
         });
         this.ClientWhatsapp.on("ready", function () {
-            index_1.socketServer.to(_this.socketID).emit("status", "Whatsapp conectado!");
+            socket_1.default.to(_this.socketID).emit("status", "Whatsapp conectado!");
         });
         this.ClientWhatsapp.initialize();
     }
@@ -74,11 +79,11 @@ var WebWhatsappClient = /** @class */ (function () {
                                 return [4 /*yield*/, qrcode_1.toDataURL(qr, {})];
                             case 1:
                                 qrcode = _a.sent();
-                                index_1.socketServer.to(this.socketID).emit("qr", qrcode);
-                                return [2 /*return*/, index_1.socketServer.to(this.socketID).emit("status", "Enviando QrCode!")];
+                                socket_1.default.to(this.socketID).emit("qr", qrcode);
+                                return [2 /*return*/, socket_1.default.to(this.socketID).emit("status", "Enviando QrCode!")];
                             case 2:
                                 err_1 = _a.sent();
-                                return [2 /*return*/, index_1.socketServer
+                                return [2 /*return*/, socket_1.default
                                         .to(this.socketID)
                                         .emit("status", "Erro ao enviar o QrCode para o cliente.")];
                             case 3:
@@ -98,7 +103,7 @@ var WebWhatsappClient = /** @class */ (function () {
             var _this = this;
             return __generator(this, function (_a) {
                 // Function for send messages.
-                index_1.socketServer.to(this.socketID).emit("status", "Enviando mensagens!");
+                socket_1.default.to(this.socketID).emit("status", "Enviando mensagens!");
                 count = 0;
                 interval = setInterval(function () { return __awaiter(_this, void 0, void 0, function () {
                     var err_2, err_3;
@@ -117,7 +122,7 @@ var WebWhatsappClient = /** @class */ (function () {
                                 return [2 /*return*/];
                             case 3:
                                 err_2 = _a.sent();
-                                return [2 /*return*/, index_1.socketServer
+                                return [2 /*return*/, socket_1.default
                                         .to(this.socketID)
                                         .emit("status", "Erro ao finalizar o client")];
                             case 4:
@@ -130,10 +135,10 @@ var WebWhatsappClient = /** @class */ (function () {
                                 _a.trys.push([6, 8, , 9]);
                                 return [4 /*yield*/, this.ClientWhatsapp
                                         .sendMessage(dataMessages.numbers[count] + "@c.us", dataMessages.message)
-                                        .then(function () { return index_1.socketServer.to(_this.socketID).emit("total-messages", count); })];
+                                        .then(function () { return socket_1.default.to(_this.socketID).emit("total-messages", count); })];
                             case 7:
                                 _a.sent();
-                                index_1.socketServer.to(this.socketID).emit("messages-status", {
+                                socket_1.default.to(this.socketID).emit("messages-status", {
                                     message: dataMessages.message,
                                     to: dataMessages.numbers[count],
                                     time: new Date().toISOString(),
@@ -142,7 +147,7 @@ var WebWhatsappClient = /** @class */ (function () {
                                 return [2 /*return*/];
                             case 8:
                                 err_3 = _a.sent();
-                                index_1.socketServer
+                                socket_1.default
                                     .to(this.socketID)
                                     .emit("status", "Erro ao enviar a mensagem para " + dataMessages.numbers[count]);
                                 return [2 /*return*/];

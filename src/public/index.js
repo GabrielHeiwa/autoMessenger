@@ -10,7 +10,7 @@ btnSubmit.disabled = true;
 const socket = io();
 socket.on("connect", async () => {
     console.info(`socket:${socket.id} connect`);
-    await axios.get("/qrcode").then(res => console.info(res.data));
+    // await axios.get("/qrcode").then(res => console.info(res.data));
 
     socket.on("status", status => {
         console.info(status);

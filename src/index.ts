@@ -1,26 +1,15 @@
-import express from "express";
-import path from "path";
-import { Server } from "socket.io";
-import { router } from "./routes";
-import { createServer } from "http";
-import morgan from "morgan";
+import socketIOServer from "./socket";
+import WebWhatsappClient from "./services";
 
-const app = express();
-const server = createServer(app);
-const socketIOOptions = {
-    cors: {
-        origin: "*"
-    },
-};
-const socketServer = new Server(server, socketIOOptions);
+let client: WebWhatsappClient;
+socketIOServer.on("connect", socket => {
+    console.log(`socket:${socket.id} conectado.`);
 
-const PORT = process.env.PORT || 4444;
+    socket.on("disconnect", () => {
+        console.info(`socket:${socket.id} desconectado.`);
+        client.destroyClient();
+    })
 
-app.use(express.json());
-app.use(morgan("dev"));
-app.use(express.static(path.resolve(__dirname, "public")));
-app.use(router)
-
-server.listen(PORT, () => console.log("> Running"));
-
-export { socketServer };
+    client = new WebWhatsappClient(socket.id);
+    client.qrcode();
+})
