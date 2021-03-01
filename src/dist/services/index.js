@@ -51,9 +51,7 @@ var WebWhatsappClient = /** @class */ (function () {
             puppeteer: {
                 args: [
                     '--no-sandbox',
-                    '--disable-setuid-sandbox',
                 ],
-                headless: false
             },
         });
         this.ClientWhatsapp.on("disconnected", function (reason) {
@@ -62,7 +60,7 @@ var WebWhatsappClient = /** @class */ (function () {
         this.ClientWhatsapp.on("ready", function () {
             socket_1.default.to(_this.socketID).emit("status", "Whatsapp conectado!");
         });
-        this.ClientWhatsapp.initialize();
+        this.ClientWhatsapp.initialize().catch(function (err) { return console.log("\n Erro no inicializar:" + err.message); });
     }
     ;
     WebWhatsappClient.prototype.qrcode = function () {

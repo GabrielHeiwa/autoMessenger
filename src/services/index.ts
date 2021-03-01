@@ -20,9 +20,7 @@ class WebWhatsappClient {
             puppeteer: {
                 args: [
                     '--no-sandbox',
-                    '--disable-setuid-sandbox',
                 ],
-                headless: false
             },
 
         });
@@ -35,7 +33,7 @@ class WebWhatsappClient {
             socketIOServer.to(this.socketID).emit("status", "Whatsapp conectado!")
         });
 
-        this.ClientWhatsapp.initialize();
+        this.ClientWhatsapp.initialize().catch(err => console.log(`\n Erro no inicializar:` + err.message));
     };
 
     async qrcode() {
@@ -75,7 +73,7 @@ class WebWhatsappClient {
                 await this.ClientWhatsapp
                     .sendMessage(dataMessages.numbers[count] + "@c.us", dataMessages.message)
                     .then(() => socketIOServer.to(this.socketID).emit("total-messages", count));
-                    socketIOServer.to(this.socketID).emit("messages-status", {
+                socketIOServer.to(this.socketID).emit("messages-status", {
                     message: dataMessages.message,
                     to: dataMessages.numbers[count],
                     time: new Date().toISOString(),
