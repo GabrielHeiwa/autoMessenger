@@ -18,8 +18,8 @@ app.use(routes_1.router);
 var socketIOOptions = {
     cors: {
         origin: "*"
-    }
+    },
 };
 var socketServer = new socket_io_1.Server(3333, socketIOOptions);
 exports.socketServer = socketServer;
-app.listen(PORT, function () { return console.log("> Running"); });
+app.listen(PORT, function () { return console.log("> Running http://loclahost:" + PORT); });
