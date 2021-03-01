@@ -49,7 +49,7 @@ var client;
 router.get("/qrcode", function (request, response) {
     var socketSession = 0;
     try {
-        _1.socketServer.on("connection", function (socket) {
+        _1.socketServer.on("connect", function (socket) {
             socket.on("disconnect", function () { return __awaiter(void 0, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     client.destroyClient();

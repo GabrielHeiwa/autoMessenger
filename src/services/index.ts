@@ -20,7 +20,6 @@ class WebWhatsappClient {
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
                 ],
-                headless: false
             },
         });
 
@@ -35,7 +34,7 @@ class WebWhatsappClient {
 
     async startClient() {
         // Function for start a client.
-        await this.ClientWhatsapp.initialize();
+        this.ClientWhatsapp.initialize();
     };
 
     async qrcode() {

@@ -8,7 +8,7 @@ let client: WebWhatsappClient;
 router.get("/qrcode", (request, response) => {
     let socketSession = 0;
     try {
-        socketServer.on("connection", socket => {
+        socketServer.on("connect", socket => {
             socket.on("disconnect", async () => { 
                 client.destroyClient();
                 console.info(`socket:${socket.id} desconectado`);

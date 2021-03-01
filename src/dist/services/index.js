@@ -49,7 +49,6 @@ var WebWhatsappClient = /** @class */ (function () {
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
                 ],
-                headless: false
             },
         });
         this.ClientWhatsapp.on("disconnected", function (reason) {
@@ -63,15 +62,9 @@ var WebWhatsappClient = /** @class */ (function () {
     WebWhatsappClient.prototype.startClient = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: 
-                    // Function for start a client.
-                    return [4 /*yield*/, this.ClientWhatsapp.initialize()];
-                    case 1:
-                        // Function for start a client.
-                        _a.sent();
-                        return [2 /*return*/];
-                }
+                // Function for start a client.
+                this.ClientWhatsapp.initialize();
+                return [2 /*return*/];
             });
         });
     };
